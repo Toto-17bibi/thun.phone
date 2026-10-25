@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thunwa Phone</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#10131b;color:white}
+.phone{max-width:430px;min-height:100vh;margin:auto;padding:22px;background:linear-gradient(145deg,#34465d,#10131b 65%);position:relative}
+.status{display:flex;justify-content:space-between;padding:8px}
+h1{font-size:60px;font-weight:200;text-align:center;margin:55px 0 8px}
+.date{text-align:center;margin-bottom:55px}
+h2{font-size:25px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 10px}
+.app{border:0;background:transparent;color:white;text-align:center;font-size:13px}
+.icon{width:68px;height:68px;border-radius:17px;background:#ffffff25;display:grid;place-items:center;font-size:32px;margin:0 auto 8px}
+.panel{display:none}
+.panel.active{display:block}
+.back{border:0;background:#ffffff20;color:white;padding:10px 16px;border-radius:12px}
+.card{background:#ffffff12;padding:15px;border-radius:16px;margin:12px 0}
+input,textarea{width:100%;padding:12px;border:0;border-radius:10px;margin:6px 0;font:inherit}
+button.send{background:#1684f8;color:white;border:0;padding:10px 15px;border-radius:12px}
+.bubble{padding:10px 14px;border-radius:15px;background:#1684f8;margin:9px 0 9px auto;width:fit-content;max-width:90%;overflow-wrap:anywhere}
+.homebar{height:5px;width:120px;background:white;border-radius:8px;margin:30px auto 0}
+</style>
+</head>
+<body>
+<div class="phone">
+<div class="status"><span id="time">09:41</span><span>5G ▰</span></div>
+
+<section id="home" class="panel active">
+<h1 id="clock">09:41</h1>
+<div class="date" id="date"></div>
+<h2 id="owner">ธันว์</h2>
+<p>โทรศัพท์ส่วนตัว</p>
+<div class="grid">
+<button class="app" onclick="openPanel('chat')"><div class="icon">💬</div>ข้อความ</button>
+<button class="app" onclick="openPanel('photos')"><div class="icon">🌈</div>รูปภาพ</button>
+<button class="app" onclick="openPanel('notes')"><div class="icon">📝</div>โน้ต</button>
+<button class="app" onclick="openPanel('contacts')"><div class="icon">👥</div>รายชื่อ</button>
+<button class="app" onclick="openPanel('phone')"><div class="icon">☎️</div>โทรศัพท์</button>
+<button class="app" onclick="openPanel('settings')"><div class="icon">⚙️</div>ตั้งค่า</button>
+</div>
+</section>
+
+<section id="chat" class="panel">
+<button class="back" onclick="openPanel('home')">‹ หน้าหลัก</button>
+<h2>ข้อความ</h2>
+<div class="card" id="chatlist">
+<div>คนสำคัญ</div>
+<div class="bubble">ถึงบ้านหรือยัง</div>
+<div class="bubble">คิดถึงนะ</div>
+</div>
+<form id="chatform">
+<input id="message" placeholder="พิมพ์ข้อความ...">
+<button class="send">ส่ง</button>
+</form>
+</section>
+
+<section id="photos" class="panel">
+<button class="back" onclick="openPanel('home')">‹ หน้าหลัก</button>
+<h2>รูปภาพ</h2>
+<div class="card">🌊　🌆　🌙</div>
+<input type="file" accept="image/*" multiple id="upload">
+<div id="gallery"></div>
+</section>
+
+<section id="notes" class="panel">
+<button class="back" onclick="openPanel('home')">‹ หน้าหลัก</button>
+<h2>โน้ตส่วนตัว</h2>
+<input id="noteTitle" placeholder="ชื่อโน้ต" value="บันทึกของธันว์">
+<textarea id="note" rows="7" placeholder="เขียนบันทึก...">บางเรื่องก็เก็บไว้ในใจดีกว่า</textarea>
+<button class="send" onclick="saveNote()">บันทึก</button>
+<p id="noteStatus"></p>
+</section>
+
+<section id="contacts" class="panel">
+<button class="back" onclick="openPanel('home')">‹ หน้าหลัก</button>
+<h2>รายชื่อ</h2>
+<div class="card">👤 คนสำคัญ<br>08X-XXX-XXXX</div>
+<div class="card">👤 เพื่อนสนิท<br>09X-XXX-XXXX</div>
+<button class="send" onclick="addContact()">+ เพิ่มรายชื่อ</button>
+<div id="newContacts"></div>
+</section>
+
+<section id="phone" class="panel">
+<button class="back" onclick="openPanel('home')">‹ หน้าหลัก</button>
+<h2>โทรศัพท์</h2>
+<input id="number" placeholder="ชื่อหรือเบอร์โทร">
+<button class="send" onclick="callMock()">โทรจำลอง</button>
+<div id="calls" class="card">ประวัติการโทรจะแสดงที่นี่</div>
+</section>
+
+<section id="settings" class="panel">
+<button class="back" onclick="openPanel('home')">‹ หน้าหลัก</button>
+<h2>ตั้งค่าโทรศัพท์</h2>
+<label>ชื่อเจ้าของ</label>
+<input id="nameInput" value="ธันว์">
+<label>ชื่อคนในแชต</label>
+<input id="friendInput" value="คนสำคัญ">
+<button class="send" onclick="saveSettings()">บันทึก</button>
+</section>
+<div class="homebar"></div>
+</div>
+
+<script>
+function openPanel(id){
+ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+}
+function tick(){
+ let d=new Date();
+ let t=d.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit',hour12:false});
+ document.getElementById('clock').textContent=t;
+ document.getElementById('time').textContent=t;
+ document.getElementById('date').textContent=d.toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long'});
+}
+tick();setInterval(tick,10000);
+try{
+ document.getElementById('noteTitle').value=localStorage.getItem('tn_title')||'บันทึกของธันว์';
+ document.getElementById('note').value=localStorage.getItem('tn_note')||'บางเรื่องก็เก็บไว้ในใจดีกว่า';
+}catch(e){}
+function saveNote(){
+ try{
+ localStorage.setItem('tn_title',document.getElementById('noteTitle').value);
+ localStorage.setItem('tn_note',document.getElementById('note').value);
+ }catch(e){}
+ document.getElementById('noteStatus').textContent='บันทึกแล้ว ✓';
+}
+document.getElementById('chatform').addEventListener('submit',function(e){
+ e.preventDefault();
+ let input=document.getElementById('message');
+ if(!input.value.trim())return;
+ let bubble=document.createElement('div');
+ bubble.className='bubble';bubble.textContent=input.value;
+ document.getElementById('chatlist').appendChild(bubble);input.value='';
+});
+document.getElementById('upload').addEventListener('change',function(e){
+ [...e.target.files].forEach(file=>{
+  let img=document.createElement('img');
+  img.src=URL.createObjectURL(file);
+  img.style.cssText='width:46%;margin:1%;border-radius:12px';
+  document.getElementById('gallery').appendChild(img);
+ });
+});
+function addContact(){
+ let name=prompt('ชื่อรายชื่อใหม่');if(!name)return;
+ let el=document.createElement('div');el.className='card';el.textContent='👤 '+name;
+ document.getElementById('newContacts').appendChild(el);
+}
+function callMock(){
+ let n=document.getElementById('number').value.trim();if(!n)return alert('ใส่ชื่อหรือเบอร์ก่อน');
+ document.getElementById('calls').textContent='☎️ โทรจำลอง: '+n+' · '+new Date().toLocaleTimeString('th-TH');
+}
+function saveSettings(){
+ let name=document.getElementById('nameInput').value.trim()||'ธันว์';
+ document.getElementById('owner').textContent=name;
+ alert('บันทึกชื่อแล้ว');
+}
+</script>
+</body>
+</html>
